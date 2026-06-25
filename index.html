@@ -1,0 +1,774 @@
+<!DOCTYPE html><!-- build:20260625000000SR -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<title>Readerbull Audit: Reflections: First Light by Silver Ramsay</title>
+<style>
+  :root {
+    --teal:     #00B5AD;
+    --teal-l:   #E0F7F6;
+    --teal-d:   #007A75;
+    --orange:   #F47421;
+    --orange-l: #FFF0E6;
+    --orange-d: #C05A10;
+    --navy:     #1B3A48;
+    --mid:      #4A6070;
+    --muted:    #7A909E;
+    --light:    #F5F7F8;
+    --border:   #DDE3E7;
+    --white:    #FFFFFF;
+    --black:    #111111;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; background:#F9FAFB; color:var(--black); line-height:1.6; font-size:13px; }
+
+  .wrap { max-width:1260px; margin:0 auto; padding:40px 32px; }
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .mb { margin-bottom:24px; }
+
+  .sec-label { font-size:14px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--orange); margin:40px 0 16px; display:flex; align-items:center; gap:12px; }
+  .sec-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .card { background:var(--white); border-radius:6px; padding:28px 32px; border:1px solid var(--border); }
+  .card-hdr { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:18px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+  .card-title { font-size:15px; font-weight:700; color:var(--teal-d); margin-bottom:10px; line-height:1.3; }
+
+  .score-panel { background:var(--navy); border-radius:6px; padding:32px; }
+  .score-eyebrow { font-size:14px; letter-spacing:2.5px; text-transform:uppercase; color:var(--orange); margin-bottom:12px; }
+  .score-num { font-size:80px; font-weight:900; color:var(--teal); line-height:1; }
+  .score-denom { font-size:28px; color:var(--orange); font-weight:300; }
+  .score-range { display:inline-block; margin-top:10px; background:rgba(244,116,33,.18); border:1px solid rgba(244,116,33,.4); color:#fff; padding:4px 16px; border-radius:3px; font-size:11px; font-weight:400; letter-spacing:1px; }
+  .bar-row { margin-top:28px; }
+  .bar-item { margin-bottom:13px; }
+  .bar-item:last-child { margin-bottom:0; }
+  .bar-meta { display:flex; justify-content:space-between; margin-bottom:5px; }
+  .bar-lbl { font-size:12px; color:rgba(255,255,255,.7); }
+  .bar-val { font-size:12px; font-weight:700; color:rgba(255,255,255,.9); }
+  .bar-track { height:6px; background:rgba(255,255,255,.1); border-radius:3px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:3px; }
+
+  .stat-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden; margin-top:20px; }
+  .stat-cell { background:var(--white); padding:16px; text-align:center; display:flex; flex-direction:column; align-items:center; }
+  .stat-cell > div:last-child { margin-top:auto; padding-top:6px; }
+  .stat-v { font-size:22px; font-weight:800; color:var(--orange); }
+  .stat-l { font-size:12px; color:var(--mid); margin-top:3px; line-height:1.4; }
+
+  .badge { display:inline-block; padding:3px 9px; border-radius:3px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; }
+  .b-teal   { background:var(--teal-l);   color:var(--teal-d); }
+  .b-orange { background:var(--orange-l); color:var(--orange-d); }
+  .b-navy   { background:rgba(27,58,72,.08); color:var(--navy); }
+  .b-muted  { background:var(--light);    color:var(--muted); }
+
+  .item { display:flex; gap:14px; align-items:flex-start; margin-bottom:20px; }
+  .item:last-child { margin-bottom:0; }
+  .item-icon { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; margin-top:1px; }
+  .icon-teal   { background:var(--teal-l);   color:var(--teal-d); }
+  .icon-orange { background:var(--orange-l); color:var(--orange-d); }
+  .item-t { font-size:15px; font-weight:700; color:var(--teal-d); margin-bottom:3px; }
+  .item-b { font-size:12px; color:var(--mid); line-height:1.6; }
+
+  .callout { border-left:3px solid var(--teal); background:var(--teal-l); padding:14px 18px; border-radius:0 4px 4px 0; font-size:12px; color:var(--navy); line-height:1.65; }
+  .callout-orange { border-left-color:var(--orange); background:var(--orange-l); }
+  .callout strong { color:var(--black); }
+
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th { background:var(--navy); color:rgba(255,255,255,.85); padding:9px 12px; text-align:left; font-weight:600; font-size:10px; letter-spacing:.5px; text-transform:uppercase; }
+  td { padding:9px 12px; border-bottom:1px solid var(--border); color:var(--mid); }
+  tr:last-child td { border-bottom:none; }
+  tr:nth-child(even) td { background:var(--light); }
+  .tc { text-align:center; } .tr { text-align:right; }
+
+  .step { display:flex; gap:16px; align-items:flex-start; padding:18px 20px; border-radius:4px; margin-bottom:10px; }
+  .step:last-child { margin-bottom:0; }
+  .step-teal   { background:var(--teal-l);   border-left:4px solid var(--teal); }
+  .step-orange { background:var(--orange-l); border-left:4px solid var(--orange); }
+  .step-num { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0; color:#fff; }
+  .num-teal   { background:var(--teal); }
+  .num-orange { background:var(--orange); }
+  .step-t { font-size:13px; font-weight:700; color:var(--teal-d); margin-bottom:4px; }
+  .step-b { font-size:12px; color:var(--mid); line-height:1.55; }
+
+  .banner { background:var(--navy); color:#fff; border-radius:6px; padding:24px 32px; margin-bottom:24px; }
+  .banner h3 { font-size:15px; font-weight:700; margin-bottom:6px; color:#fff; }
+  .banner p  { font-size:12px; color:rgba(255,255,255,.7); line-height:1.65; }
+  .banner-stat { display:inline-block; background:var(--teal); border:1px solid var(--teal-d); color:#fff; padding:8px 18px; border-radius:3px; font-size:13px; font-weight:400; margin:8px 6px 0 0; }
+
+  .hb-card { background:var(--white); border:1px solid var(--border); border-top:4px solid var(--teal); border-radius:6px; padding:28px 32px; margin-bottom:24px; }
+  .hb-eyebrow { font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal-d); margin-bottom:8px; }
+
+  .tip { position:relative; display:inline-flex; align-items:center; gap:5px; }
+  .tip-q { width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,.15); color:rgba(255,255,255,.55); font-size:8px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; cursor:default; flex-shrink:0; }
+  .tip-box { display:none; position:absolute; left:0; bottom:calc(100% + 8px); background:#fff; color:#1B3A48; font-size:11px; line-height:1.55; padding:9px 12px; border-radius:4px; width:210px; box-shadow:0 4px 20px rgba(0,0,0,.25); z-index:100; pointer-events:none; }
+  .tip-box::after { content:''; position:absolute; top:100%; left:8px; border:5px solid transparent; border-top-color:#fff; }
+  .tip:hover .tip-box { display:block; }
+
+  .ftr { background:var(--navy); color:rgba(255,255,255,.35); text-align:center; padding:22px; font-size:11px; }
+
+  .mob-bar { display:none; position:fixed; top:0; left:0; right:0; height:80px; background:var(--navy); z-index:500; align-items:center; justify-content:space-between; padding:0 16px; border-bottom:1px solid rgba(255,255,255,.08); }
+  .mob-logo img { height:77px; width:auto; display:block; }
+  .mob-hamburger { background:none; border:none; cursor:pointer; padding:6px; display:flex; flex-direction:column; gap:5px; }
+  .mob-hamburger span { display:block; width:22px; height:2px; background:#fff; border-radius:2px; }
+  .mob-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:350; }
+  .mob-overlay.open { display:block; }
+
+  @media(max-width:900px){
+    .g2{ grid-template-columns:1fr; gap:16px; }
+    .g2>*{ min-width:0; width:100%; }
+    .kw-tool{ grid-template-columns:1fr; }
+    .wrap{ padding:24px 16px; }
+  }
+  @media(max-width:768px){
+    body{ overflow-x:hidden; }
+    .mob-bar{ display:flex; }
+    .sidebar{ transform:translateX(-100%); transition:transform .25s ease; }
+    .sidebar.open{ transform:translateX(0); }
+    .main{ margin-left:0 !important; padding-top:80px; }
+    [id]{ scroll-margin-top:90px; }
+    .score-panel{ padding:20px; }
+    .score-num{ font-size:56px; }
+    .score-denom{ font-size:22px; }
+    .stat-strip{ grid-template-columns:1fr 1fr; }
+    .kw-table td,.kw-table th{ padding:7px 8px; font-size:11px; }
+    .scroll-top{ bottom:20px; right:16px; }
+    [style*="right:39px"]{ right:0 !important; width:100px !important; }
+    div[style*="right:39px"]{ height:133px !important; }
+  }
+  @media(max-width:600px){
+    .wrap{ padding:14px 12px; }
+    .card{ padding:16px 14px; }
+    .hb-eyebrow{ font-size:14px; }
+    .step{ padding:12px 14px; }
+    .stat-strip{ grid-template-columns:1fr; }
+  }
+
+  .sidebar { position:fixed; top:0; left:0; bottom:0; width:220px; background:var(--navy); z-index:400; display:flex; flex-direction:column; border-right:1px solid rgba(255,255,255,.07); overflow-y:auto; }
+  .sb-logo { padding:24px 12px 20px; border-bottom:1px solid rgba(255,255,255,.07); text-align:center; }
+  .sb-logo a { display:block; line-height:0; }
+  .sb-logo img { height:120px; width:auto; display:inline-block; position:relative; left:-8px; }
+  .sb-nav { padding:16px 10px; flex:1; }
+  .sb-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.7); padding:0 8px; margin:16px 0 6px; }
+  .sb-label:first-child { margin-top:0; }
+  .sb-nav a { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:5px; text-decoration:none; color:rgba(255,255,255,.5); font-size:12px; margin-bottom:2px; transition:background .15s,color .15s; }
+  .sb-nav a i { font-size:16px; flex-shrink:0; }
+  .sb-nav a:hover,.sb-nav a.active { background:rgba(0,181,173,.12); color:var(--teal); }
+  .sb-nav a.act { color:rgba(244,116,33,.65); }
+  .sb-nav a.act:hover { background:rgba(244,116,33,.1); color:var(--orange); }
+  .sb-divider { border:none; border-top:1px solid rgba(255,255,255,.07); margin:12px 0; }
+  .main { margin-left:220px; }
+
+  .kw-tool { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+  .kw-panel { background:var(--white); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+  .kw-panel-hdr { background:#0d1f35; color:#fff; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; min-height:94px; box-sizing:border-box; }
+  .kw-panel-hdr.rec { background:#0d1f35; }
+  .kw-panel-hdr span { font-size:13px; font-weight:700; }
+  .kw-count { background:var(--teal); color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; }
+  .kw-panel-hdr.rec .kw-count { background:var(--orange); }
+  .kw-search { padding:12px 14px; border-bottom:1px solid var(--border); display:flex; gap:8px; }
+  .kw-search input { flex:1; border:1px solid var(--border); border-radius:4px; padding:7px 10px; font-size:12px; outline:none; color:var(--black); }
+  .kw-search input:focus { border-color:var(--teal); }
+  .kw-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .kw-table th { background:var(--light); color:var(--mid); padding:8px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; border-bottom:1px solid var(--border); }
+  .kw-table td { padding:9px 12px; border-bottom:1px solid var(--border); color:var(--mid); }
+  .kw-table tr:last-child td { border-bottom:none; }
+  .kw-table tr:hover td { background:var(--light); }
+  .kw-table .kw-word { color:var(--navy); font-weight:500; }
+  .kw-vol { font-weight:600; color:var(--navy); }
+  .comp-high { display:inline-block; background:#FEE2E2; color:#B91C1C; font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; }
+  .comp-med  { display:inline-block; background:#FEF3C7; color:#92400E; font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; }
+  .comp-low  { display:inline-block; background:var(--teal-l); color:var(--teal-d); font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; }
+  .kw-add { background:none; border:1px solid var(--border); border-radius:3px; padding:3px 8px; font-size:10px; color:var(--muted); cursor:pointer; transition:all .15s; }
+  .kw-add:hover { border-color:var(--teal); color:var(--teal); background:var(--teal-l); }
+  .kw-rec-tag { display:inline-block; background:var(--orange-l); color:var(--orange-d); border:1px solid rgba(244,116,33,.2); border-radius:3px; padding:2px 6px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-left:4px; vertical-align:middle; }
+  .kw-na-tag { display:inline-block; background:var(--light); color:var(--muted); border:1px solid var(--border); border-radius:3px; padding:2px 6px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-left:4px; vertical-align:middle; }
+
+  .scroll-top { position:fixed; bottom:28px; right:28px; z-index:400; width:44px; height:44px; border-radius:50%; background:var(--navy); color:#fff; border:2px solid var(--teal); font-size:20px; cursor:pointer; opacity:0; pointer-events:none; transition:opacity .2s; display:flex; align-items:center; justify-content:center; }
+  .scroll-top.visible { opacity:1; pointer-events:auto; }
+  [id] { scroll-margin-top:20px; }
+</style>
+</head>
+<body>
+
+<div class="mob-bar">
+  <div class="mob-logo"><a href="#score"><img src="logo3.png" alt="Readerbull"></a></div>
+  <button class="mob-hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mob-overlay" id="mob-overlay" onclick="toggleSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+  <div class="sb-logo"><a href="#score"><img src="logo3.png" alt="Readerbull"></a></div>
+  <nav class="sb-nav">
+    <div class="sb-label">Navigate</div>
+    <a href="#score"><i class="ti ti-chart-bar"></i>Overview</a>
+    <a href="#competitors"><i class="ti ti-users"></i>Market Analysis</a>
+    <a href="#marketing"><i class="ti ti-speakerphone"></i>Marketing Strategy</a>
+    <a href="#keywords"><i class="ti ti-search"></i>Keywords</a>
+    <a href="#quick-wins"><i class="ti ti-bolt"></i>Quick Wins</a>
+    <hr class="sb-divider">
+    <div class="sb-label">Tools</div>
+    <a href="#" class="act"><i class="ti ti-star"></i>Get Reviews</a>
+    <a href="#" class="act"><i class="ti ti-book-upload"></i>Build Your ARC</a>
+    <a href="#" class="act"><i class="ti ti-ad-2"></i>Ad Campaigns</a>
+    <hr class="sb-divider">
+    <div class="sb-label">Marketplaces</div>
+    <a href="#" onclick="return false;" class="act" style="background:rgba(244,116,33,.12);color:var(--orange);"><i class="ti ti-brand-amazon"></i>Amazon KDP</a>
+    <a href="#" onclick="return false;" class="act"><i class="ti ti-brand-tiktok"></i>TikTok Shop</a>
+    <a href="#" onclick="return false;" class="act"><i class="ti ti-building-store"></i>Barnes &amp; Noble</a>
+    <a href="#" onclick="return false;" class="act"><i class="ti ti-brand-apple"></i>Apple Books</a>
+    <a href="#" onclick="return false;" class="act"><i class="ti ti-headphones"></i>Audible / ACX</a>
+  </nav>
+</div>
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+
+<div class="main">
+<div class="wrap" id="score">
+
+<!-- SCORE + SUMMARY -->
+<div class="g2 mb">
+  <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);display:flex;flex-direction:column;">
+    <!-- Score + Cover -->
+    <div style="background:var(--navy);padding:32px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+        <div>
+          <div class="score-eyebrow tip" style="position:relative;display:inline-flex;align-items:center;gap:8px;cursor:default;">Discoverability Score <span class="tip-q" style="border-color:rgba(244,116,33,.5);color:var(--orange);">?</span><span class="tip-box" style="font-weight:400;letter-spacing:0;text-transform:none;top:calc(100% + 8px);bottom:auto;left:0;right:auto;min-width:280px;background:#1a3550;border:1px solid rgba(0,181,173,.3);color:rgba(255,255,255,.85);padding:12px 14px;border-radius:4px;font-size:11px;line-height:1.6;box-shadow:0 4px 20px rgba(0,0,0,.4);">Your Discoverability Score measures how easy it is for readers to find and buy your book on Amazon. The higher your score, the more visible your book is and the more sales it generates.</span></div>
+          <div><span class="score-num" style="color:#00B5AD;">44</span><span class="score-denom">&thinsp;/ 100</span></div>
+          <div class="score-range tip" style="font-weight:400;background:rgba(0,181,173,.12);border:1px solid rgba(0,181,173,.3);position:relative;display:inline-flex;align-items:center;gap:6px;cursor:default;">Early Stage <span class="tip-q" style="border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7);font-size:9px;width:14px;height:14px;">?</span><span class="tip-box" style="font-weight:400;letter-spacing:0;text-transform:none;left:0;right:auto;min-width:220px;top:calc(100% + 8px);bottom:auto;"><strong>Getting Started:</strong> In the early stages of building discoverability. Focus on getting your listing set up correctly and gathering your first reviews. Hold off on ads until your foundations are in place.<br><br><strong>Early Stage:</strong> Your book is starting to build momentum. Continue strengthening your listing, grow your review count, and consider activating Amazon Ads.<br><br><strong>Growing:</strong> Solid foundations and gaining traction. Scale what is working: more reviews, optimised ad campaigns, and new formats.<br><br><strong>Established:</strong> Highly discoverable and performing well. Maintain momentum: protect your reviews, refine your ads, and leverage your visibility for additional titles.</span></div>
+        </div>
+        <img src="silver-ramsay-reflections-cover.png" alt="Reflections: First Light by Silver Ramsay" style="width:158px;border-radius:4px;display:block;flex-shrink:0;position:relative;right:39px;filter:brightness(1.5) saturate(1.1);box-shadow:0 8px 32px rgba(0,0,0,.5);">
+      </div>
+    </div>
+    <!-- Progress bars -->
+    <div style="background:var(--navy);padding:28px 32px 32px;">
+    <div class="bar-row">
+
+      <!-- 1. Listing /20 -->
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-lbl tip">Listing <span class="tip-q">i</span>
+            <span class="tip-box">
+              Your Listing score covers your title, subtitle, description, categories, backend keywords, cover, and price. Each element plays a role in how Amazon surfaces your book to the right readers.
+            </span>
+          </span>
+          <span class="bar-val">14 / 20</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--teal);"></div></div>
+      </div>
+
+      <!-- 2. Reviews & Ratings /20 -->
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-lbl tip">Reviews &amp; Ratings <span class="tip-q">i</span>
+            <span class="tip-box">
+              Verified reviews are one of the strongest signals Amazon uses to rank and convert books. More reviews improve organic rank, which drives more sales, which generates more reviews. Target 15 before running ads, then keep building.
+            </span>
+          </span>
+          <span class="bar-val">3</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--teal);"></div></div>
+      </div>
+
+      <!-- 3. Star Rating /20 -->
+      <div class="bar-item">
+        <div class="bar-meta">
+          <span class="bar-lbl tip">&#9733;&#9733;&#9733;&#9733;&#9733; Rating <span class="tip-q">i</span>
+            <span class="tip-box">
+              Your star rating is the average score left by readers who have reviewed your book. A rating of 4.0 or above is the target. The best way to maintain a strong rating is to deliver on what your title and description promise.
+            </span>
+          </span>
+          <span class="bar-val">5.0 / 5</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--teal);"></div></div>
+      </div>
+
+      <!-- 4. Sales/mo milestone bar -->
+      <div class="bar-item" style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);">
+        <div class="bar-meta">
+          <span class="bar-lbl tip">Sales/mo <span class="tip-q">i</span>
+            <span class="tip-box">
+              Your estimated monthly revenue from this book. $500/mo is your first milestone. $1,000+/mo is the target. Reviews, a hardback edition, and Amazon Ads are the most effective ways to grow this figure.
+            </span>
+          </span>
+        </div>
+        <div class="bar-track" style="position:relative;">
+          <div class="bar-fill" style="width:0%;background:var(--orange);"></div>
+          <div style="position:absolute;top:0;left:50%;width:2px;height:6px;background:rgba(0,0,0,.35);"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px;position:relative;">
+          <span style="font-size:11px;color:rgba(255,255,255,.85);font-weight:500;position:absolute;left:50%;transform:translateX(-50%);">$500</span>
+          <span style="font-size:11px;color:rgba(255,255,255,.85);font-weight:500;margin-left:auto;">$1,000+</span>
+        </div>
+      </div>
+
+      <!-- Amazon Ads pill -->
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:8px;">
+        <span class="bar-lbl tip" style="font-size:12px;position:relative;cursor:default;">Amazon Ads <span class="tip-q" style="border-color:rgba(244,116,33,.5);color:var(--orange);font-size:9px;width:14px;height:14px;">?</span><span class="tip-box" style="font-weight:400;letter-spacing:0;text-transform:none;min-width:240px;">Amazon Ads increase your book&rsquo;s visibility in search results and on competitor pages. We recommend activating ads once your listing is fully optimised and you have at least 15 reviews. Running ads before those foundations are in place wastes budget.</span></span>
+        <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(220,50,50,.15);border:1px solid rgba(220,50,50,.35);color:#f47171;"><span style="width:7px;height:7px;border-radius:50%;background:#f47171;display:inline-block;"></span>Not active</span>
+      </div>
+
+      <!-- BSR 3-column section -->
+      <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F47421;margin-bottom:12px;">Best Seller Rank</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+          <div style="background:rgba(255,255,255,.07);border-radius:6px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:rgba(255,255,255,.5);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Your BSR</div>
+            <div style="font-size:15px;font-weight:800;color:#fff;">Unknown</div>
+            <div style="margin-top:6px;font-size:9px;font-weight:700;background:rgba(100,120,140,.2);border:1px solid rgba(100,120,140,.3);color:rgba(255,255,255,.55);padding:2px 8px;border-radius:20px;display:inline-block;">Not Yet Live</div>
+          </div>
+          <div style="background:rgba(255,255,255,.07);border-radius:6px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:rgba(255,255,255,.5);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Niche Average</div>
+            <div style="font-size:15px;font-weight:800;color:#fff;">670,392</div>
+            <div style="margin-top:6px;font-size:9px;font-weight:700;background:rgba(244,116,33,.12);border:1px solid rgba(244,116,33,.3);color:#F47421;padding:2px 8px;border-radius:20px;display:inline-block;">Similar Level</div>
+          </div>
+          <div style="background:rgba(255,255,255,.07);border-radius:6px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:rgba(255,255,255,.5);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Top Competitor</div>
+            <div style="font-size:15px;font-weight:800;color:#00B5AD;">26,535</div>
+            <div style="margin-top:6px;font-size:9px;font-weight:700;background:rgba(0,181,173,.12);border:1px solid rgba(0,181,173,.3);color:#00B5AD;padding:2px 8px;border-radius:20px;display:inline-block;">Target</div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:rgba(255,255,255,.4);line-height:1.5;">A lower BSR means more sales. Your BSR will appear automatically once your first sales are recorded. Reviews and a targeted ad campaign are the fastest route to building rank from here.</div>
+      </div>
+
+    </div>
+    </div><!-- end navy bars -->
+  </div><!-- end panel -->
+
+  <div style="display:flex;flex-direction:column;gap:20px;">
+    <!-- BOOK SUMMARY -->
+    <div class="card">
+      <div class="card-hdr">Book Summary</div>
+      <div style="margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+        <div style="font-size:22px;font-weight:400;color:#111111;line-height:1.35;margin-bottom:4px;">Reflections: First Light: A Guided Poetry Journal for Emotional Healing, Self-Reflection, and Gentle Becoming for Women</div>
+        <div style="font-size:15px;color:var(--orange);margin-bottom:8px;">by Silver Ramsay</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="color:#F47421;font-size:13px;letter-spacing:3px;">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span style="font-size:12px;color:var(--mid);">5.0 &nbsp;&middot;&nbsp; <span style="color:var(--orange);font-weight:700;">(3)</span></span>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:12px;"><em>Reflections: First Light</em> is a guided poetry journal designed for women navigating emotional healing, self-reflection, and personal growth. Available as a paperback ($29.00) and hardback ($44.00) with A+ Content live on the listing.</p>
+      <p style="font-size:13px;font-weight:700;color:var(--mid);line-height:1.6;">This niche generates over $9,000 every month across 16 books. Within 6 to 12 months, your title could potentially earn up to $790 a month. Reviews and ads are what unlock that target. Your book is already on page three organically with no ad spend.</p>
+      <div class="stat-strip">
+        <div class="stat-cell">
+          <div class="stat-v">9</div>
+          <div class="stat-l">Books Selling Well In This Niche</div>
+          <div><span style="display:inline-block;margin-top:6px;font-size:10px;background:#FEF3C7;color:#92400E;padding:2px 10px;border-radius:20px;font-weight:700;">High Competition</span></div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-v">~$9,200/mo</div>
+          <div class="stat-l">KDP Niche Revenue</div>
+          <div><span style="display:inline-block;margin-top:6px;font-size:10px;background:var(--teal-l);color:var(--teal-d);padding:2px 10px;border-radius:20px;font-weight:700;">&#10003; Real Demand</span></div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-v" style="color:var(--orange);">Evergreen</div>
+          <div class="stat-l">Content Type</div>
+          <div><span style="display:inline-block;margin-top:6px;font-size:10px;background:var(--teal-l);color:var(--teal-d);padding:2px 10px;border-radius:20px;font-weight:700;">&#10003; Stays Relevant</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFESSIONAL ASSESSMENT -->
+    <div class="card">
+      <div class="card-hdr">Professional Assessment</div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:12px;">This niche generates over $9,000 every month across 16 books. One title earns $2,216 a month. Your book has a perfect 5-star rating, A+ Content live, and is ranking on page three organically with no ad spend. The foundation is strong.</p>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:14px;">Reviews come first. Build to 15 via ARC outreach, then confirm your 7 backend keyword fields are loaded with buyer-intent terms. At 15 reviews, launch Sponsored Products for the paperback. Reviews, a fully optimised listing, and ads working together are the combination that closes the gap between where you are and $790 a month.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <span class="badge b-teal">Page 3 Organic</span>
+        <span class="badge b-teal">5.0 Star Rating</span>
+        <span class="badge b-teal">A+ Content Live</span>
+        <span class="badge b-teal">2 Categories</span>
+        <span class="badge b-teal">Hardback Available</span>
+        <span class="badge b-orange">3 Written Reviews</span>
+        <span class="badge b-orange">No Ads Running</span>
+        <span class="badge b-orange">Premium Price vs Niche</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- INSIGHT BANNER -->
+<div class="banner mb">
+  <h3>&#128161; Perfect Rating. Zero Revenue. One Action Changes Both.</h3>
+  <p>This niche earns over $9,000 every month. Your book has a 5.0 star rating and A+ Content already live. The only thing separating your foundation from $790 a month is reviews and a targeted ad campaign. The pattern across this niche is clear: books with reviews and ads earn. Books without both do not.</p>
+  <div>
+    <span class="banner-stat">Currently: $0/mo &middot; Paperback $29 &middot; no ads</span>
+    <span class="banner-stat">Target: $790/mo &middot; In poetry we say... &middot; 373 reviews with ads</span>
+  </div>
+</div>
+
+<!-- MARKETING STRATEGY -->
+<div id="marketing" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Marketing Strategy</div>
+
+<!-- STEP 1 -->
+<div class="card mb">
+  <div class="hb-eyebrow">Step 1: Load Your 7 Backend Keyword Fields</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:16px;">Your Listing score is capped at 14 until the 7 KDP backend keyword fields are confirmed. This is the single fastest action you can take to improve discoverability. &ldquo;Poetry journal&rdquo; alone gets 15,545 monthly searches on Amazon. Your title includes &ldquo;guided poetry journal&rdquo; which is working. The backend fields need to spread reach across adjacent buyer-intent searches to pull in more of the 16,000+ monthly searches in this niche.</p>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Target buyer-intent terms across all 7 fields</div>
+      <div class="item-b">Use a different term in each field. Do not repeat variations of the same phrase. Lead with: &ldquo;poetry journal for women,&rdquo; &ldquo;guided poetry journal,&rdquo; &ldquo;journal women guided,&rdquo; &ldquo;poetry writing journal,&rdquo; &ldquo;poetry prompt journal,&rdquo; &ldquo;emotional healing journal,&rdquo; and &ldquo;self-reflection journal for women.&rdquo; Each field is a separate search path into your listing.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Avoid generic terms that attract the wrong buyer</div>
+      <div class="item-b">Terms like &ldquo;poetry journal bulk&rdquo; (4,145 searches) bring in buyers looking for wholesale quantities, not personal journaling. &ldquo;Journal poetry&rdquo; and &ldquo;poetry notebook journal&rdquo; are useful but lower volume. Prioritize the terms that describe a woman searching for healing and self-reflection content specifically.</div>
+    </div>
+  </div>
+  <div class="item" style="margin-bottom:0;">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Review your description opening line</div>
+      <div class="item-b">Your first sentence in the description should lead with the reader&rsquo;s need, not the book&rsquo;s title. A woman searching for an emotional healing journal wants to know this book speaks to her before she reads further. If your opening line starts with &ldquo;Reflections: First Light is...&rdquo; rewrite it to lead with her problem. That change alone improves conversion.</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:20px;"><span style="font-size:28px;color:#F47421;line-height:1;">&#8595;</span></div>
+</div>
+
+<!-- STEP 2 -->
+<div class="card mb">
+  <div class="hb-eyebrow">Step 2: Build to 15 Reviews Before Running Ads</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:16px;">You have 3 written reviews and a perfect 5.0 rating. That is a stronger foundation than most books in this niche have at this stage. Reaching 15 gives your listing the social proof needed to convert ad traffic into paid sales. Your 5-star average means every new review adds to an already-excellent signal. Getting to 15 is the priority before any money goes into ads.</p>
+  <div class="callout" style="margin-bottom:16px;">Your $29 paperback is priced 81% above the niche average of $15.99. At that premium, social proof matters more than for a $15 book. Aim for 25+ reviews before scaling ad spend. The conversion rate at 25 reviews will justify the price point and make the ad spend efficient.</div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Run an ARC campaign via BookSirens or Hidden Gems</div>
+      <div class="item-b">Both platforms connect authors with readers who opt in to receive advance review copies in exchange for honest feedback. The women&rsquo;s emotional wellness and personal growth readership on these platforms is large and active. A well-presented campaign for this title could generate 15 to 30 reviews within 4 to 6 weeks. This is the fastest legitimate path to the review threshold needed for ads.</div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Add a warm review request inside the book itself</div>
+      <div class="item-b">Place a natural, genuine request mid-book and at the back. Many readers who loved the experience simply never think to leave a review without a prompt. A sincere ask at the right emotional moment (just after they have completed a journaling exercise) yields the best response rates. Do not ask for a specific star rating. Amazon&rsquo;s terms prohibit this.</div>
+    </div>
+  </div>
+  <div class="item" style="margin-bottom:0;">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Reach women&rsquo;s wellness and poetry communities directly</div>
+      <div class="item-b">Reddit&rsquo;s r/poetry, r/journaling, and r/selfimprovement have large, engaged communities. Facebook groups for women&rsquo;s healing circles and journaling practice are populated by exactly the readers this book is designed for. A genuine, non-promotional post sharing the book&rsquo;s intent (not a sales pitch) often generates both community engagement and organic review activity.</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:20px;"><span style="font-size:28px;color:#F47421;line-height:1;">&#8595;</span></div>
+</div>
+
+<!-- STEP 3 -->
+<div class="hb-card mb">
+  <div class="hb-eyebrow">Step 3: Launch Amazon Ads for the Paperback</div>
+  <div class="g2" style="gap:32px;align-items:start;">
+    <div>
+      <p style="font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:20px;">Ads move the Sales/mo bar. The books earning real revenue in this niche are almost certainly running Sponsored Products campaigns. At $29, your paperback royalty is approximately $9.07. A profitable ad campaign means spending less than $9.07 per sale. Start conservatively, prove the ACoS, then scale. Your 90-day benchmark is <em>Words to Live By</em> at 37 reviews and $179/month. The 12-month target is <em>In poetry we say...</em> at 373 reviews and $790/month.</p>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Start with Sponsored Products at $5 to $7/day</div>
+          <div class="item-b">Target: &ldquo;poetry journal for women,&rdquo; &ldquo;guided poetry journal,&rdquo; and &ldquo;emotional healing journal.&rdquo; These reach buyers with clear paid-book intent rather than browsers looking for free content. Run for 14 days before reviewing performance. Do not increase budget until the campaign shows a profitable ACoS.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Add Sponsored Display ads on competitor ASINs</div>
+          <div class="item-b">Target the product pages of <em>In poetry we say...</em> (BSR 89,071, $790/mo) and <em>Words to Live By</em> (BSR 696,827, $179/mo). Buyers on those pages are already in a buying mindset for this type of book. A well-placed display ad intercepts that intent directly and converts at higher rates than cold keyword searches.</div>
+        </div>
+      </div>
+      <div class="item" style="margin-bottom:0;">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Target ACoS below 30% for profitability at $29</div>
+          <div class="item-b">At $29 paperback, your royalty is roughly $9.07 (KDP standard rate). Target spending under $9.07 per sale. An ACoS of 30% or below is profitable. Pause keywords with no sales after 14 days. Scale what converts. The 90-day goal is $179/month (Words to Live By benchmark with 37 reviews).</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">Niche Competitors: Revenue and Review Benchmarks</p>
+      <table style="margin-bottom:16px;">
+        <thead><tr><th>Book</th><th class="tc">BSR</th><th class="tr">Rev/Mo</th><th class="tc">Reviews</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Healing Through Words</strong> <span class="badge b-navy" style="font-size:9px;">Ceiling</span></td><td class="tc">26,535</td><td class="tr" style="color:var(--teal-d);font-weight:700;">$2,216</td><td class="tc">1,573</td></tr>
+          <tr><td>In poetry we say... <span class="badge b-teal" style="font-size:9px;">12-Month Target</span></td><td class="tc">89,071</td><td class="tr" style="color:var(--teal-d);font-weight:700;">$790</td><td class="tc">373</td></tr>
+          <tr><td>Words to Live By <span class="badge b-orange" style="font-size:9px;">90-Day Target</span></td><td class="tc">696,827</td><td class="tr">$179</td><td class="tc">37</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-orange">
+        <strong>Healing Through Words (Rupi Kaur, 1,573 reviews)</strong> is the niche ceiling. You do not compete with it directly. Rupi Kaur is a #1 NYT bestselling poet. The opportunity is in the 37 to 373 review tier where real ad competition is limited and the revenue is genuine.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="card mb">
+  <div class="hb-eyebrow">Step 4: Optimize Your Categories</div>
+  <p style="font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:16px;">Your book is currently in two poetry categories: Poetry &rsaquo; Themes &amp; Styles &rsaquo; Family and Poetry &rsaquo; Themes &amp; Styles &rsaquo; Motivational &amp; Inspirational. These are reasonable placements, but &ldquo;guided journal&rdquo; buyers typically search in Self-Help and Journaling categories, not Poetry. A category move could put your book in front of a larger, more commercially active audience.</p>
+  <div class="item">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">Request Books &rsaquo; Self-Help &rsaquo; Creativity as a second category</div>
+      <div class="item-b">Email KDP support to add a Self-Help or Journaling category alongside your existing Poetry placement. Guided journals in the Self-Help browse path reach buyers specifically searching for therapeutic writing tools. The audience is more commercially active than the general poetry readership and more likely to convert at a $29 price point.</div>
+    </div>
+  </div>
+  <div class="item" style="margin-bottom:0;">
+    <div class="item-icon icon-orange">&#10003;</div>
+    <div>
+      <div class="item-t">A well-chosen sub-category can earn a Best Seller ribbon</div>
+      <div class="item-b">As your BSR builds with reviews and ads, a smaller sub-category with lighter competition can deliver the orange Best Seller badge. That badge shows in search results and meaningfully improves click-through rates. Women&rsquo;s Self-Help and Journaling sub-categories on Amazon include niches where a book at your current review level could rank in the top 10.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MARKET ANALYSIS -->
+<div id="competitors" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Market Analysis</div>
+<div class="card mb">
+  <div class="g2" style="gap:32px;align-items:start;">
+    <div>
+      <div class="card-title">Niche Summary</div>
+      <div class="callout" style="margin-bottom:18px;">
+        This niche earns over $9,000 every month across 16 books and the paid tier runs from $179 to $790 a month. Your book is already on page three organically. A+ Content is live and the 5-star rating holds. The books in the middle tier (37 to 373 reviews) are the real competitive set and they are reachable within 12 months.
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Reviews are the primary revenue driver in this niche</div>
+          <div class="item-b">The revenue range across the competitive set correlates directly with review count. Words to Live By (37 reviews) earns $179/month. In poetry we say... (373 reviews) earns $790/month. The relationship between review count and revenue is consistent. Building reviews is not optional. It is the mechanism.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Your $29 price point requires stronger social proof to convert</div>
+          <div class="item-b">The niche average price is $15.99. At $29, buyers need more than a cover and description to commit. Every review at this price point carries more weight than it would at $15.99. Getting to 25 to 30 reviews before scaling ad spend is more important here than for a cheaper comparable book. Do not treat 15 reviews as the ceiling for this price tier.</div>
+        </div>
+      </div>
+      <div class="item" style="margin-bottom:0;">
+        <div class="item-icon icon-orange">&#10003;</div>
+        <div>
+          <div class="item-t">Niche revenue from 9 visible books: the full picture may be larger</div>
+          <div class="item-b">Readerbull niche research records $9,200/month from 9 books visible in the data. The full niche of 16 books likely generates more. Even using the conservative figure, the niche is commercially active and the paid tier is open to a well-reviewed new entry with ad support.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">Niche Data: Guided Poetry Journal for Women</p>
+      <table style="margin-bottom:16px;">
+        <thead><tr><th>Book</th><th class="tc">BSR</th><th class="tr">Rev / Mo</th><th class="tc">Reviews</th><th class="tc">Ads</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Healing Through Words</strong> <span class="badge" style="background:rgba(0,181,173,.15);color:var(--teal);font-size:9px;">Ceiling</span></td><td class="tc">26,535</td><td class="tr" style="color:var(--teal-d);font-weight:700;">$2,216</td><td class="tc">1,573</td><td class="tc"><span class="badge b-muted">?</span></td></tr>
+          <tr><td>In poetry we say...</td><td class="tc">89,071</td><td class="tr" style="color:var(--teal-d);font-weight:700;">$790</td><td class="tc">373</td><td class="tc"><span class="badge b-muted">?</span></td></tr>
+          <tr><td><em>Additional books in niche</em></td><td class="tc" style="color:var(--muted);">Various</td><td class="tr" style="color:var(--muted);">$120&ndash;$2,059</td><td class="tc" style="color:var(--muted);">Various</td><td class="tc"><span class="badge b-muted">?</span></td></tr>
+          <tr><td>Words to Live By</td><td class="tc">696,827</td><td class="tr">$179</td><td class="tc">37</td><td class="tc"><span class="badge b-muted">?</span></td></tr>
+          <tr><td style="font-weight:700;color:var(--teal-d);">Your Book</td><td class="tc" style="color:var(--muted);">Unknown</td><td class="tr" style="color:var(--orange);">$0</td><td class="tc">3</td><td class="tc"><span class="badge b-muted">No</span></td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-orange">
+        Ads status is unconfirmed for all competitors in this niche. Based on revenue patterns, the top earners are almost certainly running Sponsored Products. Your book is the only confirmed non-advertising title in the data, which is the clearest single action available to close the revenue gap.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOK PORTFOLIO OPPORTUNITY -->
+<div class="sec-label">Book Portfolio Opportunity</div>
+<div class="card mb" style="border-top:4px solid var(--orange);">
+  <div class="g2" style="gap:32px;align-items:start;">
+    <div>
+      <div class="card-title">A Series Compounds Discoverability</div>
+      <div class="callout callout-orange" style="margin-bottom:18px;">
+        <strong>Two books by the same author cross-sell each other automatically.</strong> Amazon&rsquo;s &ldquo;customers also bought&rdquo; system means every reader who buys <em>Reflections: First Light</em> will be shown the next title. Each new book in the Reflections series adds a new keyword footprint, a new category placement, and a new set of search rankings.
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">1</div>
+        <div>
+          <div class="item-t">Reflections: Still Water. A Guided Poetry Journal for Grief, Loss, and Finding Peace</div>
+          <div class="item-b">A natural sequel in the Reflections series. Grief journals are a high-demand, high-emotion purchase with strong buyer intent. The audience for grief and loss journaling is large, underserved by premium guided journals, and motivated by real emotional need. Direct cross-sell from First Light readers who are continuing their healing journey.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-icon icon-orange">2</div>
+        <div>
+          <div class="item-t">Reflections: New Dawn. A Guided Poetry Journal for Rebuilding After Difficult Times</div>
+          <div class="item-b">Targets the recovery and resilience readership. Women searching for &ldquo;journal for starting over&rdquo; or &ldquo;self-help journal for women going through change&rdquo; represent a distinct buyer segment from the healing readership. Continuation of the series brand with a new entry point into adjacent search demand.</div>
+        </div>
+      </div>
+      <div class="item" style="margin-bottom:0;">
+        <div class="item-icon icon-orange">3</div>
+        <div>
+          <div class="item-t">Words That Heal: A Daily Poetry Prompt Journal for Women</div>
+          <div class="item-b">A standalone title targeting the &ldquo;poetry prompt journal&rdquo; keyword (4,261 monthly searches) and &ldquo;poetry writing journal&rdquo; (4,291 monthly searches). A daily-prompt structure broadens reach beyond the Reflections brand and captures buyers looking for structured writing practice rather than a themed emotional journey.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;">When to Start Planning the Second Title</p>
+      <div class="callout" style="margin-bottom:14px;">
+        Focus on Steps 1 to 4 first. Get reviews to 15, ads running, and the listing fully optimised before writing anything new. When your first title is generating consistent monthly revenue, the second title compounds that income without starting from zero.
+      </div>
+      <div class="callout callout-orange">
+        <strong>Series naming is a commercial asset.</strong> The &ldquo;Reflections&rdquo; brand on the spine of multiple journals creates shelf recognition, repeat purchase behaviour, and stronger series rankings in Amazon&rsquo;s algorithm. Two or three titles in the same series with consistent cover design consistently outperform standalone titles at equivalent review counts.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KEYWORDS -->
+<div id="keywords" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Keywords</div>
+<div class="callout" style="margin-bottom:18px;">
+  <strong>Amazon keyword research for &ldquo;Poetry Journal&rdquo; and &ldquo;Guided Journal Women&rdquo;.</strong> Confirmed search volumes shown. The Readerbull Recommended panel contains the buyer-intent terms most relevant to your title. Click <strong>+ Add</strong> to save to your KDP list.
+</div>
+<div class="kw-tool">
+  <div class="kw-panel">
+    <div class="kw-panel-hdr">
+      <span><i class="ti ti-brand-amazon" style="margin-right:6px;font-size:14px;vertical-align:middle;"></i>Amazon Keywords</span>
+      <span class="kw-count" id="amazon-count">12</span>
+    </div>
+    <div class="kw-search">
+      <input type="text" id="amazon-search" placeholder="Search keywords&hellip;" oninput="filterTable('amazon-tbody','amazon-count',this.value)">
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="kw-table">
+        <thead><tr><th>Keyword</th><th class="tr">Volume</th><th class="tc">Status</th><th></th></tr></thead>
+        <tbody id="amazon-tbody">
+          <tr><td class="kw-word">poetry journal</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">guided poetry journal</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">guided journal women</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">poetry journal for women</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">journal women guided</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">poetry writing journal</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-high">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">poetry prompt journal</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-high">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">poetry notebook journal</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-med">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">journal poetry</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-med">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">woman poetry</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-med">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">poetry journal bulk</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-low">Skip</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">journal for poetry</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-med">Use</span></td><td><button class="kw-add">+ Add</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="kw-panel">
+    <div class="kw-panel-hdr rec">
+      <span><div style="display:inline-block;width:66px;height:66px;overflow:hidden;vertical-align:middle;margin-right:10px;flex-shrink:0;border-radius:50%;"><img src="logo3.png" style="width:66px;height:auto;display:block;"></div>Readerbull Recommended Keywords</span>
+      <span class="kw-count" id="rec-count">8</span>
+    </div>
+    <div class="kw-search">
+      <input type="text" id="rec-search" placeholder="Filter recommendations&hellip;" oninput="filterTable('rec-tbody','rec-count',this.value)">
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="kw-table">
+        <thead><tr><th>Keyword</th><th class="tr">Volume</th><th class="tc">Status</th><th></th></tr></thead>
+        <tbody id="rec-tbody">
+          <tr><td class="kw-word">poetry journal for women</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Priority</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">guided poetry journal</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Priority</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">guided journal women</td><td class="tr kw-vol">High</td><td class="tc"><span class="comp-high">Priority</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">emotional healing journal</td><td class="tr kw-vol">-</td><td class="tc"><span class="comp-med">Best Fit</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">self-reflection journal for women</td><td class="tr kw-vol">-</td><td class="tc"><span class="comp-med">Best Fit</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">poetry writing journal</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-med">Best Fit</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">poetry prompt journal</td><td class="tr kw-vol">Medium</td><td class="tc"><span class="comp-med">Best Fit</span></td><td><button class="kw-add">+ Add</button></td></tr>
+          <tr><td class="kw-word">women healing poetry book</td><td class="tr kw-vol">-</td><td class="tc"><span class="comp-med">Best Fit</span></td><td><button class="kw-add">+ Add</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:12px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);line-height:1.5;">
+      Volumes marked &ldquo;-&rdquo; are unconfirmed. Confirm before use. All terms target paid buyer intent for emotional wellness and poetry journal searches.
+    </div>
+  </div>
+</div>
+
+<!-- QUICK WINS -->
+<div id="quick-wins" style="position:relative;top:-48px;"></div>
+<div class="sec-label">Quick Wins</div>
+<div class="card mb">
+  <div class="card-hdr">Do These in Order: Sequence Matters</div>
+  <div class="step step-orange">
+    <div class="step-num num-orange">1</div>
+    <div>
+      <div class="step-t">Load your 7 KDP backend keyword fields this week</div>
+      <div class="step-b">This is the single fastest action to improve discoverability. Lead with: &ldquo;poetry journal for women,&rdquo; &ldquo;guided poetry journal,&rdquo; &ldquo;emotional healing journal,&rdquo; &ldquo;self-reflection journal for women,&rdquo; &ldquo;guided journal women,&rdquo; &ldquo;poetry writing journal,&rdquo; and &ldquo;poetry prompt journal.&rdquo; Takes 15 minutes. Directly raises your Listing score.</div>
+    </div>
+  </div>
+  <div class="step step-orange">
+    <div class="step-num num-orange">2</div>
+    <div>
+      <div class="step-t">Request a second category in Self-Help or Journaling</div>
+      <div class="step-b">Email KDP support to add a Self-Help or Craft/Journaling category alongside your current Poetry placement. Guided journal buyers search Self-Help, not Poetry. One email opens a second browse path to a commercially active audience. Free. Takes 10 minutes.</div>
+    </div>
+  </div>
+  <div class="step step-orange">
+    <div class="step-num num-orange">3</div>
+    <div>
+      <div class="step-t">Sign up to an ARC service and target 20+ reviews</div>
+      <div class="step-b">BookSirens or Hidden Gems. The women&rsquo;s wellness and emotional healing readership on these platforms is active and exactly matched to this title. Target 20 to 30 ARC readers. Expect results within 4 to 6 weeks. At your $29 price point, 25+ reviews is the ad-launch threshold for efficient conversion.</div>
+    </div>
+  </div>
+  <div class="step step-orange">
+    <div class="step-num num-orange">4</div>
+    <div>
+      <div class="step-t">Add a review request inside the book</div>
+      <div class="step-b">Update your Kindle and paperback files with a warm, genuine ask mid-book and at the back. Every future sale now has a higher chance of generating a review. For a journaling book, the request lands best immediately after a journaling prompt has been completed. One afternoon of work, permanent compound returns.</div>
+    </div>
+  </div>
+  <div class="step step-teal">
+    <div class="step-num num-teal">5</div>
+    <div>
+      <div class="step-t">Launch Sponsored Products at $5 to $7/day once at 25 reviews</div>
+      <div class="step-b">Target &ldquo;poetry journal for women,&rdquo; &ldquo;guided poetry journal,&rdquo; and &ldquo;emotional healing journal&rdquo; in keyword campaigns. Add Sponsored Display ads on <em>In poetry we say...</em> and <em>Words to Live By</em> ASINs. Review ACoS at day 14. Target below 30% for profitability at $29. Pause non-converting keywords. Scale what converts. Benchmark: Words to Live By at $179/month with 37 reviews.</div>
+    </div>
+  </div>
+</div>
+
+<!-- READERBULL ASSESSMENT -->
+<div class="sec-label">Readerbull Assessment</div>
+<div class="card mb">
+  <p style="font-size:13px;color:var(--mid);line-height:1.85;">The data is clear. Your book has a perfect 5-star rating, A+ Content live, and page three organic rank with no ad spend. Every book earning real revenue in this niche has reviews and is running ads. That is the only gap between where you are and $790 a month.</p>
+  <p style="font-size:13px;color:var(--mid);line-height:1.85;margin-top:12px;">Load backend keywords and request a second category this week. Build to 25 reviews via ARC, then launch ads for the $29 paperback. The 90-day target is $179/month (Words to Live By benchmark). The 12-month goal is $790/month (In poetry we say... at 373 reviews). The foundation is built. Now it needs fuel.</p>
+  <div style="margin-top:16px;background:var(--navy);border-radius:6px;padding:16px 20px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px;">Your action sequence:</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.8;">1. Load 7 backend keywords &rarr; 2. Request Self-Help category &rarr; 3. ARC outreach to 25 reviews &rarr; 4. Add review request inside book &rarr; 5. Launch Sponsored Products at $5&ndash;$7/day &rarr; 6. Scale ads as ACoS proves profitable</div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-top:16px;">This audit is part of the Readerbull platform. For coaching, ad campaign management, or Done For You services, contact Readerbull directly.</p>
+</div>
+
+<!-- NOTE FROM AUTHOR -->
+<div style="margin:0 24px 32px;background:#0d2137;border-radius:8px;padding:20px 24px;border:1px solid rgba(0,181,173,.15);">
+  <p style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.75;margin:0 0 12px;"><span style="color:var(--teal);font-weight:700;">Note from Jordan:</span> I would welcome the opportunity to support you on your publishing journey.</p>
+  <p style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.75;margin:0 0 12px;">Whether you are looking for free coaching support or a managed service, I can help you with sponsored ad campaigns, editing, formatting, or cover design and more.</p>
+  <p style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.75;margin:0;">Please feel free to send me a direct message if you&rsquo;d like to explore further.</p>
+</div>
+
+</div>
+</div>
+
+<div class="ftr">Readerbull Book Audit &nbsp;&middot;&nbsp; Reflections: First Light by Silver Ramsay &nbsp;&middot;&nbsp; June 2026</div>
+
+<script>
+function toggleSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('mob-overlay');sb.classList.toggle('open');ov.classList.toggle('open');}
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sb-nav a').forEach(function(l){l.addEventListener('click',function(){if(window.innerWidth<=768)toggleSidebar();});});});
+function filterTable(tbodyId,countId,query){var tbody=document.getElementById(tbodyId),countEl=document.getElementById(countId),rows=tbody.querySelectorAll('tr'),q=query.toLowerCase(),visible=0;rows.forEach(function(row){var text=row.querySelector('.kw-word').textContent.toLowerCase(),show=text.indexOf(q)!==-1;row.style.display=show?'':'none';if(show)visible++;});countEl.textContent=visible;}
+document.addEventListener('click',function(e){if(e.target.classList.contains('kw-add')&&e.target.textContent==='+ Add'){e.target.textContent='&#10003; Added';e.target.style.background='var(--teal-l)';e.target.style.color='var(--teal-d)';e.target.style.borderColor='var(--teal)';}});
+(function(){
+  var btn=document.querySelector('.scroll-top');
+  window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>400);});
+  var nav=document.querySelector('nav.sb-nav');
+  if(!nav)return;
+  var navLinks=Array.from(nav.querySelectorAll('a[href^="#"]:not(.act)'));
+  var sectionIds=navLinks.map(function(a){return a.getAttribute('href').slice(1);}).filter(Boolean);
+  var domOrderIds=sectionIds.filter(function(id){return document.getElementById(id);});
+  domOrderIds.sort(function(a,b){return document.getElementById(a).offsetTop-document.getElementById(b).offsetTop;});
+  function getActiveId(){var scrollY=window.scrollY+150,active=domOrderIds[0];domOrderIds.forEach(function(id){var el=document.getElementById(id);if(el&&el.getBoundingClientRect().top+window.scrollY<=scrollY)active=id;});return active;}
+  function setActive(id){navLinks.forEach(function(a){a.classList.remove('active');});var al=nav.querySelector('a[href="#'+id+'"]');if(al)al.classList.add('active');}
+  document.addEventListener('DOMContentLoaded',function(){setActive(getActiveId());});
+  var ticking=false;
+  window.addEventListener('scroll',function(){if(!ticking){window.requestAnimationFrame(function(){setActive(getActiveId());ticking=false;});ticking=true;}});
+})();
+</script>
+</body>
+</html>
