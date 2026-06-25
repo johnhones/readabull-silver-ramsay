@@ -769,6 +769,7 @@ document.addEventListener('click',function(e){if(e.target.classList.contains('kw
   var ticking=false;
   window.addEventListener('scroll',function(){if(!ticking){window.requestAnimationFrame(function(){setActive(getActiveId());ticking=false;});ticking=true;}});
 })();
+(function(){function eqKwH(){var hdrs=document.querySelectorAll('.kw-panel-hdr');if(hdrs.length<2)return;hdrs.forEach(function(h){h.style.minHeight='';});var mH=0;hdrs.forEach(function(h){mH=Math.max(mH,h.offsetHeight);});hdrs.forEach(function(h){h.style.minHeight=mH+'px';});}document.addEventListener('DOMContentLoaded',eqKwH);window.addEventListener('resize',eqKwH);})();
 </script>
 </body>
 </html>
